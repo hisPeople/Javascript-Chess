@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg3096"
+   version="1.1"
+   inkscape:version="0.48.1 r9760"
+   sodipodi:docname="bbishop.svg">
+  <defs
+     id="defs3098" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="458.18896"
+     inkscape:cy="520"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="958"
+     inkscape:window-height="1122"
+     inkscape:window-x="960"
+     inkscape:window-y="24"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata3101">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="BBishop"
+       d="m 354.26078,403.64236 17.05263,14.16066 -6.28255,18.02494 c 3.26704,2.94383 5.33518,7.20079 5.33518,11.94182 0,5.45717 -2.74526,10.28391 -6.90582,13.18837 6.01646,0.50745 10.14682,1.484 10.14682,2.61773 0,1.33676 -5.70915,2.434 -13.5374,2.81717 1.33567,16.44921 14.13574,2.95777 14.13574,18.49862 l 0,4.76177 -39.83934,0 0,-4.76177 c 0,-15.53566 12.79288,-2.08915 14.13573,-18.49862 -7.84113,-0.38198 -13.58725,-1.47899 -13.58725,-2.81717 0,-1.13373 4.15529,-2.11028 10.17174,-2.61773 -4.16979,-2.9012 -6.88088,-7.72464 -6.88088,-13.18837 0,-4.72845 2.03337,-8.97388 5.28531,-11.91689 l -6.28254,-18.04987 17.05263,-14.16066 z m 0.0249,10.72022 c -0.49722,0 -0.89751,0.40029 -0.89751,0.89751 l 0,4.33795 -4.51246,0 c -0.49722,0 -0.89751,0.33358 -0.89751,0.74792 0,0.41435 0.40029,0.74792 0.89751,0.74792 l 4.51246,0 0,7.52909 c 0,0.49722 0.40029,0.89751 0.89751,0.89751 0.49722,0 0.8975,-0.40029 0.8975,-0.89751 l 0,-7.52909 4.51247,0 c 0.49722,0 0.89751,-0.33357 0.89751,-0.74792 0,-0.41434 -0.40029,-0.74792 -0.89751,-0.74792 l -4.51247,0 0,-4.33795 c 0,-0.49722 -0.40028,-0.89751 -0.8975,-0.89751 z"
+       style="fill:#404040;fill-opacity:1;fill-rule:nonzero;stroke:#919191;stroke-width:3.98891973;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       inkscape:label="Black Bishop"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
