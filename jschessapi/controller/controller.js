@@ -19,31 +19,20 @@ function getPawnMovedTwoMove(pawnMovedTwoLocation){
 	return new move(from, pawnMovedTwoLocation);
 }
 
-// TODO: figure this switch statement out. maybe use instanceof?
 function getPieceFromTypeString(typeString, promotionListener){
 	var promoPiece = null;
-	switch (typeString) {	
-		case "king":
-			// TODO: pass this into king as the ICheckChecker?
-			promoPiece = new king(this);
-			break;
-		case "queen":
-			promoPiece = new queen();
-			break;
-		case "bishop":
-			promoPiece = new bishop();
-			break;
-		case "knight":
-			promoPiece = new knight();
-			break;
-		case 'rook':
-			promoPiece = new rook();
-			break;
-		case 'pawn':
-			promoPiece = new pawn(promotionListener);
-			break;
-		default:
-			break;
+	if(typeString == "king"){
+		promoPiece = new king(this);
+	} else if(typeString == "queen"){
+		promoPiece = new queen();
+	} else if(typeString == "rook"){
+		promoPiece = new rook();
+	} else if(typeString == "bishop"){
+		promoPiece = new bishop();
+	} else if(typeString == "knight"){
+		promoPiece = new knight();
+	} else if(typeString == "pawn"){
+		promoPiece = new pawn(promotionListener);
 	}
 	return promoPiece;
 }

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript"
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js"></script>
+<script type="text/javascript">
+	var CELL_SIZE = 100;
+	var X_CELLS = 8;
+	var Y_CELLS = 8;
+	var BOARD_WIDTH = CELL_SIZE * Y_CELLS + 1;
+	var BOARD_HEIGHT = CELL_SIZE * X_CELLS + 1;
+	var brd = new board();
+	$(document).ready(function() {
+		drawBoard();
+		brd.initialize();
+		var whiteTeam = buildTeam("white");
+		var darkTeam = buildTeam("black");
+		brd.drawPieces();
+
+		/* 	var whtpawn = new pawn("white");
+		 drawPiece(whtpawn.getImage(),2,2);
+		 var drkqueen = new queen("black");
+		 drawPiece(drkqueen.getImage(),4,4); */
+
+	});
+
+	function buildTeam(color) {
+		var mainRow = (color == "white") ? 0 : 7;
+		var t = new team(color);
+		setupPiece(new king(color), new location(mainRow, 4), t);
+		setupPiece(new queen(color), new location(mainRow, 3), t);
+		setupPiece(new bishop(color), new location(mainRow, 2), t);
+		setupPiece(new bishop(color), new location(mainRow, 5), t);
+		setupPiece(new knight(color), new location(mainRow, 1), t);
+		setupPiece(new knight(color), new location(mainRow, 6), t);
+		setupPiece(new rook(color), new location(mainRow, 0), t);
+		setupPiece(new rook(color), new location(mainRow, 7), t);
+
+		buildTeamPawns(t);
+		return t;
+	}
+
+	function buildTeamPawns(team) {
+		var pawnRow = (team.color == "white") ? 1 : 6;
+		for ( var i = 0; i < 8; i++) {
+			setupPiece(new pawn(team.color), new location(pawnRow, i), team);
+		}
+	}
+
+	function setupPiece(piece, location, team) {
+		team.add(piece);
+		brd.placePiece(piece, location);
+
+	}
+
+	function piece(color) {
+		this.color = color;
+		this.image = null;
+		this.getImage = getImage;
+		this.getcolor = getColor;
+	}
+
+	function location(row, col) {
+		this.row = row;
+		this.col = col;
+
+		this.getRow = getRow;
+		this.getCol = getCol;
+	}
+
+	function getRow() {
+		return this.row;
+	}
+
+	function getCol() {
+		return this.col;
+	}
+
+	function getImage() {
+		return this.image;
+	}
+
+	function getColor() {
+		return this.color;
+	}
+
+	function team(color) {
+		this.color = color;
+		this.pieces = new Array();
+		this.add = addPiece;
+	}
+
+	function addPiece(piece) {
+		this.pieces.push(piece);
+	}
+
+	function board() {
+		var x = new Array(8);
+		for ( var i = 0; i < 8; i++) {
+			x[i] = new Array(8);
+		}
+		this.boardSquares = x;
+		this.initialize = initializeBoard;
+		this.placePiece = placePiece;
+		this.drawPieces = drawPiecesOnBoard;
+	}
+
+	function drawPiecesOnBoard() {
+		for ( var i = 0; i < 8; i++) {
+			for ( var j = 0; j < 8; j++) {
+				var p = this.boardSquares[i][j].getPiece();
+				if (p != null) {
+					drawPiece(p.getImage(), i, j);
+				}
+			}
+		}
+	}
+
+	function placePiece(piece, location) {
+		this.boardSquares[location.getRow()][location.getCol()].setPiece(piece);
+	}
+
+	function initializeBoard() {
+		for ( var i = 0; i < 8; i++) {
+			for ( var j = 0; j < 8; j++) {
+				this.boardSquares[i][j] = new boardSquare();
+			}
+		}
+	}
+
+	function drawBoard() {
+		$('body').append('<canvas id="c">');
+		var c_can = $('#c');
+		c_can.attr('width', BOARD_WIDTH);
+		c_can.attr('height', BOARD_HEIGHT);
+		var actualCanvas = $('#c')[0];
+		var context = actualCanvas.getContext('2d');
+		for ( var i = 0; i <= 8; i++) {
+			var x = CELL_SIZE * i + .5;
+			context.moveTo(x, 0);
+			context.lineTo(x, BOARD_HEIGHT);
+		}
+
+		for ( var i = 0; i <= 8; i++) {
+			var y = CELL_SIZE * i + .5;
+			context.moveTo(0, y);
+			context.lineTo(BOARD_WIDTH, y);
+		}
+
+		for ( var i = 0; i <= 8; i++) {
+			for ( var j = 0; j <= 8; j++) {
+				if (i % 2 == 0) {
+					if (j % 2 == 1) {
+						fillCell(i, j);
+					}
+				} else {
+					if (j % 2 == 0) {
+						fillCell(i, j);
+					}
+				}
+			}
+		}
+		context.strokeStyle = "#000";
+		context.stroke();
+	}
+
+	function boardSquare() {
+		this.piece = null;
+		this.getPiece = getPiece;
+		this.setPiece = setPiece;
+	}
+
+	function getPiece() {
+		return this.piece;
+	}
+
+	function setPiece(piece) {
+		this.piece = piece;
+	}
+
+	pawn.prototype = new piece();
+	pawn.constructor = pawn;
+	function pawn(color) {
+		this.image = new Image();
+		if (color == "white") {
+			this.image.src = "images/WPawn.png";
+		} else {
+			this.image.src = "images/BPawn.png";
+		}
+	}
+
+	king.prototype = new piece();
+	king.constructor = king;
+	function king(color) {
+		this.image = new Image();
+		if (color == "white") {
+			this.image.src = "images/WKing.png";
+		} else {
+			this.image.src = "images/BKing.png";
+		}
+	}
+
+	rook.prototype = new piece();
+	rook.constructor = rook;
+	function rook(color) {
+		this.image = new Image();
+		if (color == "white") {
+			this.image.src = "images/WRook.png";
+		} else {
+			this.image.src = "images/BRook.png";
+		}
+	}
+
+	bishop.prototype = new piece();
+	bishop.constructor = bishop;
+	function bishop(color) {
+		this.image = new Image();
+		if (color == "white") {
+			this.image.src = "images/WBishop.png";
+		} else {
+			this.image.src = "images/BBishop.png";
+		}
+	}
+
+	knight.prototype = new piece();
+	knight.constructor = knight;
+	function knight(color) {
+		this.image = new Image();
+		if (color == "white") {
+			this.image.src = "images/WKnight.png";
+		} else {
+			this.image.src = "images/BKnight.png";
+		}
+	}
+
+	queen.prototype = new piece();
+	queen.constructor = new queen;
+	function queen(color) {
+		this.image = new Image();
+		if (color == "white") {
+			this.image.src = "images/WQueen.png";
+		} else {
+			this.image.src = "images/BQueen.png";
+		}
+	}
+
+	function fillCell(row, col) {
+		var x = row * CELL_SIZE + .5;
+		var y = col * CELL_SIZE + .5;
+		var can = $('#c')[0];
+		var cntxt = can.getContext('2d');
+		cntxt.fillStyle = "#A2D492";
+		cntxt.fillRect(x, y, CELL_SIZE, CELL_SIZE);
+	}
+
+	function drawPiece(image, row, col) {
+		var x = row * CELL_SIZE + .5;
+		var y = col * CELL_SIZE + .5;
+		var can = $('#c')[0];
+		var context = can.getContext('2d');
+		image.onload = function() {
+			context.drawImage(image, x, y);
+		}
+	}
+</script>
+</head>
+<body>
+
+</body>
+</html>
