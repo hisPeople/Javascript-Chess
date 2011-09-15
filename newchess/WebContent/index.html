@@ -12,6 +12,8 @@
 	var BOARD_WIDTH = CELL_SIZE * Y_CELLS + 1;
 	var BOARD_HEIGHT = CELL_SIZE * X_CELLS + 1;
 	var brd = new board();
+	var isSelected = false;
+	var selectedLocation;
 	$(document).ready(function() {
 		drawBoard();
 		brd.initialize();
@@ -24,7 +26,27 @@
 		 var drkqueen = new queen("black");
 		 drawPiece(drkqueen.getImage(),4,4); */
 
+		$('#c').bind("click", function(e) {
+			var x = Math.floor(e.pageX / 100);
+			var y = Math.floor(e.pageY / 100);
+
+			console.log('isSelected : ' + isSelected);
+
+			if (!isSelected) {
+				selectedLocation = new location(y, x);
+			} else {
+				movePiece(selectedLocation, new location(y, x));
+			}
+
+			isSelected = !isSelected;
+		})
+
 	});
+
+	function movePiece(from, to) {
+		console.log('FROM: ' + from.getRow() + ', ' + from.getCol());
+		console.log('TO: ' + to.getRow() + ', ' + to.getCol());
+	}
 
 	function buildTeam(color) {
 		var mainRow = (color == "white") ? 7 : 0;
@@ -61,6 +83,11 @@
 		this.getImage = getImage;
 		this.getcolor = getColor;
 	}
+
+	/*
+	function junk(){
+		console.log("hello");
+	}*/
 
 	function location(row, col) {
 		this.row = row;
@@ -184,42 +211,49 @@
 	pawn.constructor = pawn;
 	function pawn(color) {
 		this.image = new Image();
-		this.image.src = (color == "white") ? "images/WPawn.png" : "images/BPawn.png"
+		this.image.src = (color == "white") ? "images/WPawn.png"
+				: "images/BPawn.png";
+		/*this.getImage().addEventListener("click", junk, false);*/
 	}
 
 	king.prototype = new piece();
 	king.constructor = king;
 	function king(color) {
 		this.image = new Image();
-		this.image.src = (color == "white") ? "images/WKing.png" : "images/BKing.png"
+		this.image.src = (color == "white") ? "images/WKing.png"
+				: "images/BKing.png";
 	}
 
 	rook.prototype = new piece();
 	rook.constructor = rook;
 	function rook(color) {
 		this.image = new Image();
-		this.image.src = (color == "white") ? "images/WRook.png" : "images/BRook.png"
+		this.image.src = (color == "white") ? "images/WRook.png"
+				: "images/BRook.png";
 	}
 
 	bishop.prototype = new piece();
 	bishop.constructor = bishop;
 	function bishop(color) {
 		this.image = new Image();
-		this.image.src = (color == "white") ? "images/WBishop.png" : "images/BBishop.png"
+		this.image.src = (color == "white") ? "images/WBishop.png"
+				: "images/BBishop.png";
 	}
 
 	knight.prototype = new piece();
 	knight.constructor = knight;
 	function knight(color) {
 		this.image = new Image();
-		this.image.src = (color == "white") ? "images/WKnight.png" : "images/BKnight.png"
+		this.image.src = (color == "white") ? "images/WKnight.png"
+				: "images/BKnight.png";
 	}
 
 	queen.prototype = new piece();
 	queen.constructor = new queen;
 	function queen(color) {
 		this.image = new Image();
-		this.image.src = (color == "white") ? "images/WQueen.png" : "images/BQueen.png"   
+		this.image.src = (color == "white") ? "images/WQueen.png"
+				: "images/BQueen.png";
 	}
 
 	function fillCell(row, col) {
@@ -241,8 +275,8 @@
 		}
 	}
 </script>
+
 </head>
 <body>
-
 </body>
 </html>
