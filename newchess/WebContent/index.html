@@ -27,7 +27,7 @@
 	});
 
 	function buildTeam(color) {
-		var mainRow = (color == "white") ? 0 : 7;
+		var mainRow = (color == "white") ? 7 : 0;
 		var t = new team(color);
 		setupPiece(new king(color), new location(mainRow, 4), t);
 		setupPiece(new queen(color), new location(mainRow, 3), t);
@@ -43,7 +43,7 @@
 	}
 
 	function buildTeamPawns(team) {
-		var pawnRow = (team.color == "white") ? 1 : 6;
+		var pawnRow = (team.color == "white") ? 6 : 1;
 		for ( var i = 0; i < 8; i++) {
 			setupPiece(new pawn(team.color), new location(pawnRow, i), team);
 		}
@@ -251,7 +251,7 @@
 		var y = col * CELL_SIZE + .5;
 		var can = $('#c')[0];
 		var cntxt = can.getContext('2d');
-		cntxt.fillStyle = "#A2D492";
+		cntxt.fillStyle = "#58634D";
 		cntxt.fillRect(x, y, CELL_SIZE, CELL_SIZE);
 	}
 
@@ -261,7 +261,7 @@
 		var can = $('#c')[0];
 		var context = can.getContext('2d');
 		image.onload = function() {
-			context.drawImage(image, x, y);
+			context.drawImage(image, y, x);
 		}
 	}
 </script>
