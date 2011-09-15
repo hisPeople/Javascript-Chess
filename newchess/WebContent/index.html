@@ -11,6 +11,7 @@
 	var Y_CELLS = 8;
 	var BOARD_WIDTH = CELL_SIZE * Y_CELLS + 1;
 	var BOARD_HEIGHT = CELL_SIZE * X_CELLS + 1;
+	var hasSelection = false;
 	var brd = new board();
 	$(document).ready(function() {
 		drawBoard();
@@ -19,12 +20,78 @@
 		var darkTeam = buildTeam("black");
 		brd.drawPieces();
 
+		
+		var from = new location(6,3);
+		var to = new location(5,3);
+		var testMove = new move(from,to);
+		makeMoveTest(testMove);
+		
+		var moveArgs = {"from":{"row":6,"column":2},"to":{"row":4,"column":2}};
+		var testMove2 = moveArgs;
+		
+		var from2 = new location(testMove2.from.row,testMove2.from.column);
+		var to2 = new location (testMove2.to.row,testMove2.to.column); 
+		var move3 = new move(from2,to2);
+		makeMoveTest(move3);
+		
+		
+		
+		//getMoveFromServer(null);
 		/* 	var whtpawn = new pawn("white");
 		 drawPiece(whtpawn.getImage(),2,2);
 		 var drkqueen = new queen("black");
 		 drawPiece(drkqueen.getImage(),4,4); */
 
 	});
+	
+	
+
+	function getMoveFromServer(gameState){
+		$.ajax({
+			type: "POST",
+			url: "chess.neumont.edu:8081/ChessGame/getmove",
+			data : '{"movingTeamColor":"DARK","pieceDescriptions":[[{"teamColor":"LIGHT","hasMoved":false,"pieceType":"ROOK"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"KNIGHT"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"BISHOP"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"QUEEN"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"KING"},null,{"teamColor":"LIGHT","hasMoved":false,"pieceType":"KNIGHT"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"ROOK"}],[{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"},null,{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"}],[null,null,null,null,null,null,null,null],[null,null,{"teamColor":"LIGHT","hasMoved":true,"pieceType":"BISHOP"},null,{"teamColor":"LIGHT","hasMoved":true,"pieceType":"PAWN"},null,null,null],[null,null,null,null,null,null,null,null],[{"teamColor":"DARK","hasMoved":true,"pieceType":"PAWN"},null,null,null,null,null,null,{"teamColor":"DARK","hasMoved":true,"pieceType":"PAWN"}],[null,{"teamColor":"DARK","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"DARK","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"DARK","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"DARK","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"DARK","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"DARK","hasMoved":false,"pieceType":"PAWN"},null],[{"teamColor":"DARK","hasMoved":false,"pieceType":"ROOK"},{"teamColor":"DARK","hasMoved":false,"pieceType":"KNIGHT"},{"teamColor":"DARK","hasMoved":false,"pieceType":"BISHOP"},{"teamColor":"DARK","hasMoved":false,"pieceType":"QUEEN"},{"teamColor":"DARK","hasMoved":false,"pieceType":"KING"},{"teamColor":"DARK","hasMoved":false,"pieceType":"BISHOP"},{"teamColor":"DARK","hasMoved":false,"pieceType":"KNIGHT"},{"teamColor":"DARK","hasMoved":false,"pieceType":"ROOK"}]]}',
+			success: function(move){
+				console.log(move);
+			}
+		});
+	}
+	
+	function getPieceFromLocation(location){
+		return brd.boardSquares[location.getRow()][location.getCol()].getPiece();
+	}
+	
+	function makeMove(move){
+		var from = move.from;
+		var to = move.to;
+	}
+	
+	function move(from,to){
+		this.from = from;
+		this.to = to;
+	}
+	
+	function makeMoveTest(move){
+/* 		var from = new location(from.row,from.col);
+		var to = new location(to.row, to.col); */
+		var from = move.from;
+		var to = move.to;
+		var actualCanvas = $('#c')[0];
+		var pieceOnFrom = getPieceFromLocation(from);
+		var context = actualCanvas.getContext('2d');
+		var img = context.createImageData(100, 100);
+		for (var i = img.data.length; --i >= 0; ){
+		  img.data[i] = 0;
+		}
+		context.putImageData(img, from.getRow(), from.getCol());
+		drawPiece(pieceOnFrom.getImage(), to.getRow(), to.getCol());
+	}
+	
+	function setGameState(gameState){
+		this.movingTeamColor = gamesState.movingTeamColor;
+		
+	}
+	
 
 	function buildTeam(color) {
 		var mainRow = (color == "white") ? 7 : 0;
@@ -42,6 +109,8 @@
 		return t;
 	}
 
+	
+	
 	function buildTeamPawns(team) {
 		var pawnRow = (team.color == "white") ? 6 : 1;
 		for ( var i = 0; i < 8; i++) {
@@ -60,6 +129,13 @@
 		this.image = null;
 		this.getImage = getImage;
 		this.getcolor = getColor;
+		this.onclick = handleClick;
+	}
+	
+	function handleClick(e){
+		var x = Math.floor(e.pageX / CELL_SIZE);
+		var y = Math.floor(e.pageY / CELL_SIZE);
+		alert(x + ", " + y);
 	}
 
 	function location(row, col) {
@@ -164,6 +240,9 @@
 		}
 		context.strokeStyle = "#000";
 		context.stroke();
+		
+		c_can.bind('click', handleClick);
+		
 	}
 
 	function boardSquare() {
@@ -244,6 +323,7 @@
 		} else {
 			this.image.src = "images/BQueen.png";
 		}
+		this.image.onclick = handleClick;
 	}
 
 	function fillCell(row, col) {
