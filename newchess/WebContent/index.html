@@ -66,7 +66,11 @@
 		var context = actualCanvas.getContext('2d');
 		var oldX = to.getRow() * CELL_SIZE +.5;
 		var oldY = to.getCol() * CELL_SIZE +.5;
+		
+		var newX = from.getRow() * CELL_SIZE + .5;
+		var newY = from.getCol() * CELL_SIZE + .5;
 		context.clearRect(oldY,oldX,CELL_SIZE,CELL_SIZE);
+		context.clearRect(newY,newX,CELL_SIZE,CELL_SIZE);
 		if (to.getRow() % 2 == 0) {
 			if (to.getCol() % 2 == 1) {
 				fillCell(to.getCol(), to.getRow());
@@ -74,6 +78,16 @@
 		} else {
 			if (to.getCol() % 2 == 0) {
 				fillCell(to.getCol(), to.getRow());
+			} 
+		}
+		
+		if (from.getRow() % 2 == 0) {
+			if (from.getCol() % 2 == 1) {
+				fillCell(from.getCol(), from.getRow());
+			}
+		} else {
+			if (from.getCol() % 2 == 0) {
+				fillCell(from.getCol(), from.getRow());
 			} 
 		}
 		
