@@ -14,6 +14,7 @@
 	var hasSelection = false;
 	var brd = new board();
 	var isSelected = false;
+	var pieceOnSelectedLocation;
 	var selectedLocation;
 	$(document).ready(function() {
 		drawBoard();
@@ -22,97 +23,76 @@
 		var darkTeam = buildTeam("black");
 		brd.drawPieces();
 
+		/* 		
 		
-		var from = new location(6,3);
-		var to = new location(5,3);
-		var testMove = new move(from,to);
-		makeMoveTest(testMove);
+		 var moveArgs = {"from":{"row":6,"column":2},"to":{"row":4,"column":2}};
+		 var testMove = moveArgs;
 		
-		var moveArgs = {"from":{"row":6,"column":2},"to":{"row":4,"column":2}};
-		var testMove2 = moveArgs;
-		
-		var from2 = new location(testMove2.from.row,testMove2.from.column);
-		var to2 = new location (testMove2.to.row,testMove2.to.column); 
-		var move3 = new move(from2,to2);
-		makeMoveTest(move3);
-		
-		
-		
-		//getMoveFromServer(null);
-		/* 	var whtpawn = new pawn("white");
-		 drawPiece(whtpawn.getImage(),2,2);
-		 var drkqueen = new queen("black");
-		 drawPiece(drkqueen.getImage(),4,4); */
-
-		$('#c').bind("click", function(e) {
-			var x = Math.floor(e.pageX / 100);
-			var y = Math.floor(e.pageY / 100);
-
-			console.log('isSelected : ' + isSelected);
-
-			if (!isSelected) {
-				selectedLocation = new location(y, x);
-			} else {
-				movePiece(selectedLocation, new location(y, x));
-			}
-
-			isSelected = !isSelected;
-		})
+		 var from = new location(testMove.from.row,testMove.from.column);
+		 var to = new location (testMove.to.row,testMove.to.column); 
+		 var tmove = new move(from,to);
+		 makeMoveTest(tmove);
+		*/ 	
 
 	});
-	
-	
 
-	function getMoveFromServer(gameState){
-		$.ajax({
-			type: "POST",
-			url: "chess.neumont.edu:8081/ChessGame/getmove",
-			data : '{"movingTeamColor":"DARK","pieceDescriptions":[[{"teamColor":"LIGHT","hasMoved":false,"pieceType":"ROOK"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"KNIGHT"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"BISHOP"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"QUEEN"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"KING"},null,{"teamColor":"LIGHT","hasMoved":false,"pieceType":"KNIGHT"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"ROOK"}],[{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"},null,{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"}],[null,null,null,null,null,null,null,null],[null,null,{"teamColor":"LIGHT","hasMoved":true,"pieceType":"BISHOP"},null,{"teamColor":"LIGHT","hasMoved":true,"pieceType":"PAWN"},null,null,null],[null,null,null,null,null,null,null,null],[{"teamColor":"DARK","hasMoved":true,"pieceType":"PAWN"},null,null,null,null,null,null,{"teamColor":"DARK","hasMoved":true,"pieceType":"PAWN"}],[null,{"teamColor":"DARK","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"DARK","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"DARK","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"DARK","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"DARK","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"DARK","hasMoved":false,"pieceType":"PAWN"},null],[{"teamColor":"DARK","hasMoved":false,"pieceType":"ROOK"},{"teamColor":"DARK","hasMoved":false,"pieceType":"KNIGHT"},{"teamColor":"DARK","hasMoved":false,"pieceType":"BISHOP"},{"teamColor":"DARK","hasMoved":false,"pieceType":"QUEEN"},{"teamColor":"DARK","hasMoved":false,"pieceType":"KING"},{"teamColor":"DARK","hasMoved":false,"pieceType":"BISHOP"},{"teamColor":"DARK","hasMoved":false,"pieceType":"KNIGHT"},{"teamColor":"DARK","hasMoved":false,"pieceType":"ROOK"}]]}',
-			success: function(move){
-				console.log(move);
+	function getMoveFromServer(gameState) {
+		$
+				.ajax({
+					type : "POST",
+					url : "chess.neumont.edu:8081/ChessGame/getmove",
+					data : '{"movingTeamColor":"DARK","pieceDescriptions":[[{"teamColor":"LIGHT","hasMoved":false,"pieceType":"ROOK"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"KNIGHT"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"BISHOP"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"QUEEN"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"KING"},null,{"teamColor":"LIGHT","hasMoved":false,"pieceType":"KNIGHT"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"ROOK"}],[{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"},null,{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"LIGHT","hasMoved":false,"pieceType":"PAWN"}],[null,null,null,null,null,null,null,null],[null,null,{"teamColor":"LIGHT","hasMoved":true,"pieceType":"BISHOP"},null,{"teamColor":"LIGHT","hasMoved":true,"pieceType":"PAWN"},null,null,null],[null,null,null,null,null,null,null,null],[{"teamColor":"DARK","hasMoved":true,"pieceType":"PAWN"},null,null,null,null,null,null,{"teamColor":"DARK","hasMoved":true,"pieceType":"PAWN"}],[null,{"teamColor":"DARK","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"DARK","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"DARK","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"DARK","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"DARK","hasMoved":false,"pieceType":"PAWN"},{"teamColor":"DARK","hasMoved":false,"pieceType":"PAWN"},null],[{"teamColor":"DARK","hasMoved":false,"pieceType":"ROOK"},{"teamColor":"DARK","hasMoved":false,"pieceType":"KNIGHT"},{"teamColor":"DARK","hasMoved":false,"pieceType":"BISHOP"},{"teamColor":"DARK","hasMoved":false,"pieceType":"QUEEN"},{"teamColor":"DARK","hasMoved":false,"pieceType":"KING"},{"teamColor":"DARK","hasMoved":false,"pieceType":"BISHOP"},{"teamColor":"DARK","hasMoved":false,"pieceType":"KNIGHT"},{"teamColor":"DARK","hasMoved":false,"pieceType":"ROOK"}]]}',
+					success : function(move) {
+						console.log(move);
+					}
+				});
+	}
+
+	function getPieceFromLocation(location) {
+		return brd.boardSquares[location.getCol()][location.getRow()]
+				.getPiece();
+	}
+
+	function makeMove(move) {
+		var from = move.to;
+		var to = move.from;
+		brd.placePiece(pieceOnSelectedLocation, to);
+		brd.placePiece(null, from);
+		updateImage(pieceOnSelectedLocation.getImage(),from,to);
+	}
+	
+	function updateImage(image, to, from){
+		var actualCanvas = $('#c')[0];
+		var context = actualCanvas.getContext('2d');
+		var oldX = to.getRow() * CELL_SIZE +.5;
+		var oldY = to.getCol() * CELL_SIZE +.5;
+		context.clearRect(oldY,oldX,CELL_SIZE,CELL_SIZE);
+		if (to.getRow() % 2 == 0) {
+			if (to.getCol() % 2 == 1) {
+				fillCell(to.getCol(), to.getRow());
 			}
-		});
+		} else {
+			if (to.getCol() % 2 == 0) {
+				fillCell(to.getCol(), to.getRow());
+			} 
+		}
+		
+		var x = from.getRow() * CELL_SIZE + .5;
+        var y = from.getCol() * CELL_SIZE + .5;
+        var can = $('#c')[0];
+        var context = can.getContext('2d');
+        context.drawImage(image, y, x);
+		
 	}
-	
-	function getPieceFromLocation(location){
-		return brd.boardSquares[location.getRow()][location.getCol()].getPiece();
-	}
-	
-	function makeMove(move){
-		var from = move.from;
-		var to = move.to;
-	}
-	
-	function move(from,to){
+
+	function move(to, from) {
 		this.from = from;
 		this.to = to;
 	}
-	
-	function makeMoveTest(move){
-/* 		var from = new location(from.row,from.col);
-		var to = new location(to.row, to.col); */
-		var from = move.from;
-		var to = move.to;
-		var actualCanvas = $('#c')[0];
-		var pieceOnFrom = getPieceFromLocation(from);
-		var context = actualCanvas.getContext('2d');
-		var img = context.createImageData(100, 100);
-		for (var i = img.data.length; --i >= 0; ){
-		  img.data[i] = 0;
-		}
-		context.putImageData(img, from.getRow(), from.getCol());
-		drawPiece(pieceOnFrom.getImage(), to.getRow(), to.getCol());
-	}
-	
-	function setGameState(gameState){
-		this.movingTeamColor = gamesState.movingTeamColor;
-		
-	}
-	
 
-	function movePiece(from, to) {
-		console.log('FROM: ' + from.getRow() + ', ' + from.getCol());
-		console.log('TO: ' + to.getRow() + ', ' + to.getCol());
+	function setGameState(gameState) {
+		this.movingTeamColor = gamesState.movingTeamColor;
+
 	}
 
 	function buildTeam(color) {
@@ -131,8 +111,6 @@
 		return t;
 	}
 
-	
-	
 	function buildTeamPawns(team) {
 		var pawnRow = (team.color == "white") ? 6 : 1;
 		for ( var i = 0; i < 8; i++) {
@@ -151,23 +129,11 @@
 		this.image = null;
 		this.getImage = getImage;
 		this.getcolor = getColor;
-		this.onclick = handleClick;
 	}
-	
-	function handleClick(e){
-		var x = Math.floor(e.pageX / CELL_SIZE);
-		var y = Math.floor(e.pageY / CELL_SIZE);
-		alert(x + ", " + y);
-	}
-
-	/*
-	function junk(){
-		console.log("hello");
-	}*/
 
 	function location(row, col) {
-		this.row = row;
-		this.col = col;
+		this.row = col;
+		this.col = row;
 
 		this.getRow = getRow;
 		this.getCol = getCol;
@@ -222,19 +188,18 @@
 	}
 
 	function placePiece(piece, location) {
-		this.boardSquares[location.getRow()][location.getCol()].setPiece(piece);
+		this.boardSquares[location.getCol()][location.getRow()].setPiece(piece);
 	}
 
 	function initializeBoard() {
 		for ( var i = 0; i < 8; i++) {
 			for ( var j = 0; j < 8; j++) {
-				this.boardSquares[i][j] = new boardSquare();
+				this.boardSquares[j][i] = new boardSquare();
 			}
 		}
 	}
 
-	function drawBoard() {
-		$('body').append('<canvas id="c">');
+	function drawSquares() {
 		var c_can = $('#c');
 		c_can.attr('width', BOARD_WIDTH);
 		c_can.attr('height', BOARD_HEIGHT);
@@ -267,9 +232,33 @@
 		}
 		context.strokeStyle = "#000";
 		context.stroke();
-		
-		c_can.bind('click', handleClick);
-		
+	}
+
+	function drawBoard() {
+		$('body').append('<canvas id="c">');
+		drawSquares();
+		var c_can = $('#c');
+		c_can.bind("click", function(e) {
+			var x = Math.floor(e.pageX / 100);
+			var y = Math.floor(e.pageY / 100);
+
+			console.log('isSelected : ' + isSelected);
+			
+			if (!isSelected) {
+				selectedLocation = new location(x, y);
+				pieceOnSelectedLocation = getPieceFromLocation(selectedLocation);
+				console.log(getPieceFromLocation(selectedLocation));
+			} else {
+				var endingDestination = new location(x,y);
+				var m = new move(selectedLocation, endingDestination);
+				console.log("FROM: " + selectedLocation.getRow() + "," + selectedLocation.getCol());
+				console.log("TO: " + endingDestination.getRow() + "," + endingDestination.getCol());
+				makeMove(m);
+			}
+
+			isSelected = !isSelected;
+		})
+
 	}
 
 	function boardSquare() {
@@ -350,7 +339,7 @@
 		var can = $('#c')[0];
 		var context = can.getContext('2d');
 		image.onload = function() {
-			context.drawImage(image, y, x);
+			context.drawImage(image, x, y);
 		}
 	}
 </script>
