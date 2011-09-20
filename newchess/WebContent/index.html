@@ -5,6 +5,17 @@
 <title>Insert title here</title>
 <script type="text/javascript"
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js"></script>
+<script type="text/javascript" src="move.js"></script>
+<script type="text/javascript" src="location.js"></script>
+<script type="text/javascript" src="board.js"></script>
+<script type="text/javascript" src="boardsquare.js"></script>
+<script type="text/javascript" src="game.js"></script>
+<script type="text/javascript" src="gamecontroller.js"></script>
+<script type="text/javascript" src="gamedisplay.js"></script>
+<script type="text/javascript" src="gamestate.js"></script>
+<script type="text/javascript" src="piece.js"></script>
+<script type="text/javascript" src="piecedescription.js"></script>
+<script type="text/javascript" src="team.js"></script>
 <script type="text/javascript">
 	var CELL_SIZE = 100;
 	var X_CELLS = 8;
@@ -16,6 +27,7 @@
 	var isSelected = false;
 	var pieceOnSelectedLocation;
 	var selectedLocation;
+	var movingTeam = "LIGHT";
 	$(document).ready(function() {
 		drawBoard();
 		brd.initialize();
@@ -32,7 +44,7 @@
 		 var to = new location (testMove.to.row,testMove.to.column); 
 		 var tmove = new move(from,to);
 		 makeMoveTest(tmove);
-		*/ 	
+		 */
 
 	});
 
@@ -46,315 +58,6 @@
 						console.log(move);
 					}
 				});
-	}
-
-	function getPieceFromLocation(location) {
-		return brd.boardSquares[location.getCol()][location.getRow()]
-				.getPiece();
-	}
-
-	function makeMove(move) {
-		var from = move.to;
-		var to = move.from;
-		brd.placePiece(pieceOnSelectedLocation, to);
-		brd.placePiece(null, from);
-		updateImage(pieceOnSelectedLocation.getImage(),from,to);
-	}
-	
-	function updateImage(image, to, from){
-		var actualCanvas = $('#c')[0];
-		var context = actualCanvas.getContext('2d');
-		var oldX = to.getRow() * CELL_SIZE +.5;
-		var oldY = to.getCol() * CELL_SIZE +.5;
-		
-		var newX = from.getRow() * CELL_SIZE + .5;
-		var newY = from.getCol() * CELL_SIZE + .5;
-		context.clearRect(oldY,oldX,CELL_SIZE,CELL_SIZE);
-		context.clearRect(newY,newX,CELL_SIZE,CELL_SIZE);
-		if (to.getRow() % 2 == 0) {
-			if (to.getCol() % 2 == 1) {
-				fillCell(to.getCol(), to.getRow());
-			}
-		} else {
-			if (to.getCol() % 2 == 0) {
-				fillCell(to.getCol(), to.getRow());
-			} 
-		}
-		
-		if (from.getRow() % 2 == 0) {
-			if (from.getCol() % 2 == 1) {
-				fillCell(from.getCol(), from.getRow());
-			}
-		} else {
-			if (from.getCol() % 2 == 0) {
-				fillCell(from.getCol(), from.getRow());
-			} 
-		}
-		
-		var x = from.getRow() * CELL_SIZE + .5;
-        var y = from.getCol() * CELL_SIZE + .5;
-        var can = $('#c')[0];
-        var context = can.getContext('2d');
-        context.drawImage(image, y, x);
-		
-	}
-
-	function move(to, from) {
-		this.from = from;
-		this.to = to;
-	}
-
-	function setGameState(gameState) {
-		this.movingTeamColor = gamesState.movingTeamColor;
-
-	}
-
-	function buildTeam(color) {
-		var mainRow = (color == "white") ? 7 : 0;
-		var t = new team(color);
-		setupPiece(new king(color), new location(mainRow, 4), t);
-		setupPiece(new queen(color), new location(mainRow, 3), t);
-		setupPiece(new bishop(color), new location(mainRow, 2), t);
-		setupPiece(new bishop(color), new location(mainRow, 5), t);
-		setupPiece(new knight(color), new location(mainRow, 1), t);
-		setupPiece(new knight(color), new location(mainRow, 6), t);
-		setupPiece(new rook(color), new location(mainRow, 0), t);
-		setupPiece(new rook(color), new location(mainRow, 7), t);
-
-		buildTeamPawns(t);
-		return t;
-	}
-
-	function buildTeamPawns(team) {
-		var pawnRow = (team.color == "white") ? 6 : 1;
-		for ( var i = 0; i < 8; i++) {
-			setupPiece(new pawn(team.color), new location(pawnRow, i), team);
-		}
-	}
-
-	function setupPiece(piece, location, team) {
-		team.add(piece);
-		brd.placePiece(piece, location);
-
-	}
-
-	function piece(color) {
-		this.color = color;
-		this.image = null;
-		this.getImage = getImage;
-		this.getcolor = getColor;
-	}
-
-	function location(row, col) {
-		this.row = col;
-		this.col = row;
-
-		this.getRow = getRow;
-		this.getCol = getCol;
-	}
-
-	function getRow() {
-		return this.row;
-	}
-
-	function getCol() {
-		return this.col;
-	}
-
-	function getImage() {
-		return this.image;
-	}
-
-	function getColor() {
-		return this.color;
-	}
-
-	function team(color) {
-		this.color = color;
-		this.pieces = new Array();
-		this.add = addPiece;
-	}
-
-	function addPiece(piece) {
-		this.pieces.push(piece);
-	}
-
-	function board() {
-		var x = new Array(8);
-		for ( var i = 0; i < 8; i++) {
-			x[i] = new Array(8);
-		}
-		this.boardSquares = x;
-		this.initialize = initializeBoard;
-		this.placePiece = placePiece;
-		this.drawPieces = drawPiecesOnBoard;
-	}
-
-	function drawPiecesOnBoard() {
-		for ( var i = 0; i < 8; i++) {
-			for ( var j = 0; j < 8; j++) {
-				var p = this.boardSquares[i][j].getPiece();
-				if (p != null) {
-					drawPiece(p.getImage(), i, j);
-				}
-			}
-		}
-	}
-
-	function placePiece(piece, location) {
-		this.boardSquares[location.getCol()][location.getRow()].setPiece(piece);
-	}
-
-	function initializeBoard() {
-		for ( var i = 0; i < 8; i++) {
-			for ( var j = 0; j < 8; j++) {
-				this.boardSquares[j][i] = new boardSquare();
-			}
-		}
-	}
-
-	function drawSquares() {
-		var c_can = $('#c');
-		c_can.attr('width', BOARD_WIDTH);
-		c_can.attr('height', BOARD_HEIGHT);
-		var actualCanvas = $('#c')[0];
-		var context = actualCanvas.getContext('2d');
-		for ( var i = 0; i <= 8; i++) {
-			var x = CELL_SIZE * i + .5;
-			context.moveTo(x, 0);
-			context.lineTo(x, BOARD_HEIGHT);
-		}
-
-		for ( var i = 0; i <= 8; i++) {
-			var y = CELL_SIZE * i + .5;
-			context.moveTo(0, y);
-			context.lineTo(BOARD_WIDTH, y);
-		}
-
-		for ( var i = 0; i <= 8; i++) {
-			for ( var j = 0; j <= 8; j++) {
-				if (i % 2 == 0) {
-					if (j % 2 == 1) {
-						fillCell(i, j);
-					}
-				} else {
-					if (j % 2 == 0) {
-						fillCell(i, j);
-					}
-				}
-			}
-		}
-		context.strokeStyle = "#000";
-		context.stroke();
-	}
-
-	function drawBoard() {
-		$('body').append('<canvas id="c">');
-		drawSquares();
-		var c_can = $('#c');
-		c_can.bind("click", function(e) {
-			var x = Math.floor(e.pageX / 100);
-			var y = Math.floor(e.pageY / 100);
-
-			console.log('isSelected : ' + isSelected);
-			
-			if (!isSelected) {
-				selectedLocation = new location(x, y);
-				pieceOnSelectedLocation = getPieceFromLocation(selectedLocation);
-				console.log(getPieceFromLocation(selectedLocation));
-			} else {
-				var endingDestination = new location(x,y);
-				var m = new move(selectedLocation, endingDestination);
-				console.log("FROM: " + selectedLocation.getRow() + "," + selectedLocation.getCol());
-				console.log("TO: " + endingDestination.getRow() + "," + endingDestination.getCol());
-				makeMove(m);
-			}
-
-			isSelected = !isSelected;
-		})
-
-	}
-
-	function boardSquare() {
-		this.piece = null;
-		this.getPiece = getPiece;
-		this.setPiece = setPiece;
-	}
-
-	function getPiece() {
-		return this.piece;
-	}
-
-	function setPiece(piece) {
-		this.piece = piece;
-	}
-
-	pawn.prototype = new piece();
-	pawn.constructor = pawn;
-	function pawn(color) {
-		this.image = new Image();
-		this.image.src = (color == "white") ? "images/WPawn.png"
-				: "images/BPawn.png";
-		/*this.getImage().addEventListener("click", junk, false);*/
-	}
-
-	king.prototype = new piece();
-	king.constructor = king;
-	function king(color) {
-		this.image = new Image();
-		this.image.src = (color == "white") ? "images/WKing.png"
-				: "images/BKing.png";
-	}
-
-	rook.prototype = new piece();
-	rook.constructor = rook;
-	function rook(color) {
-		this.image = new Image();
-		this.image.src = (color == "white") ? "images/WRook.png"
-				: "images/BRook.png";
-	}
-
-	bishop.prototype = new piece();
-	bishop.constructor = bishop;
-	function bishop(color) {
-		this.image = new Image();
-		this.image.src = (color == "white") ? "images/WBishop.png"
-				: "images/BBishop.png";
-	}
-
-	knight.prototype = new piece();
-	knight.constructor = knight;
-	function knight(color) {
-		this.image = new Image();
-		this.image.src = (color == "white") ? "images/WKnight.png"
-				: "images/BKnight.png";
-	}
-
-	queen.prototype = new piece();
-	queen.constructor = new queen;
-	function queen(color) {
-		this.image = new Image();
-		this.image.src = (color == "white") ? "images/WQueen.png"
-				: "images/BQueen.png";
-	}
-
-	function fillCell(row, col) {
-		var x = row * CELL_SIZE + .5;
-		var y = col * CELL_SIZE + .5;
-		var can = $('#c')[0];
-		var cntxt = can.getContext('2d');
-		cntxt.fillStyle = "#58634D";
-		cntxt.fillRect(x, y, CELL_SIZE, CELL_SIZE);
-	}
-
-	function drawPiece(image, row, col) {
-		var x = row * CELL_SIZE + .5;
-		var y = col * CELL_SIZE + .5;
-		var can = $('#c')[0];
-		var context = can.getContext('2d');
-		image.onload = function() {
-			context.drawImage(image, x, y);
-		}
 	}
 </script>
 
